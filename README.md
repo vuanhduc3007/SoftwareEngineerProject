@@ -15,4 +15,19 @@ py -m venv .venv
 .venv\Scripts\Activate.ps1
 ```
 
-The application entry point will be documented here when the app shell is added. Sprint 1 requirements and book-catalog acceptance checks are in [docs/requirements-and-acceptance.md](docs/requirements-and-acceptance.md).
+Start the application from the project root:
+
+```powershell
+py -m library_management.app
+```
+
+If the package is not yet installed in the active environment, install it in
+editable mode first:
+
+```powershell
+py -m pip install -e .
+```
+
+The app stores its SQLite database in the per-user application data directory.
+Sprint 1 requirements and book-catalog acceptance checks are in
+[docs/requirements-and-acceptance.md](docs/requirements-and-acceptance.md).
