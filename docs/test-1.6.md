@@ -3,4 +3,6 @@ Phạm Hữu Hiệu
 
 ## 2. Fixed confirmation box
 
-## 3. Test functionality: App worked perfectly
+## 3. Fixed order by ID and edit book function
+
+## 4. Test functionality: App worked perfectly
