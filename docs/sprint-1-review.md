@@ -38,7 +38,7 @@ The team completed and demonstrated all three Sprint 1 deliverables:
 
 ## 3. Sprint Review Feedback
 
-| Category | Feedback / Observations |
-| :--- | :--- | :--- |
+| Category | Feedback |
+| :--- | :--- |
 | **UI / UX** | Clean layout with distinct color-coded action buttons (`Add`, `Edit`, `Delete`) matching the initial wireframes. | 
 | **Workflows** | CRUD and search operations respond quickly, and the bottom status bar (`Status: ...`) provides clear user feedback. |
