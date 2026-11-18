@@ -58,7 +58,7 @@ class BookRepository:
                        OR author LIKE ? ESCAPE '\\' COLLATE NOCASE
                        OR isbn LIKE ? ESCAPE '\\' COLLATE NOCASE
                        OR category LIKE ? ESCAPE '\\' COLLATE NOCASE
-                    ORDER BY title COLLATE NOCASE, author COLLATE NOCASE, id
+                    ORDER BY id
                     """,
                     (pattern, pattern, pattern, pattern),
                 ).fetchall()
@@ -67,7 +67,7 @@ class BookRepository:
                     """
                     SELECT id, title, author, isbn, category
                     FROM books
-                    ORDER BY title COLLATE NOCASE, author COLLATE NOCASE, id
+                    ORDER BY id
                     """
                 ).fetchall()
         return [self._book_from_row(row) for row in rows]
