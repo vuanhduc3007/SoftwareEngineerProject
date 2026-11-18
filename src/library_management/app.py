@@ -586,7 +586,7 @@ class LibraryApplication(tk.Tk):
         )
         scrollbar.grid(row=0, column=1, sticky="ns")
         self.book_table.configure(yscrollcommand=scrollbar.set)
-        self.book_table.bind("<Double-1>", lambda _event: self._edit_book())
+        self.book_table.bind("<Double-1>", self._on_table_double_click)
 
         self.empty_label = tk.Label(
             content,
@@ -690,6 +690,12 @@ class LibraryApplication(tk.Tk):
 
     def _add_book(self) -> None:
         BookForm(self, self._save_book)
+
+    def _on_table_double_click(self, event: tk.Event) -> None:
+        region = self.book_table.identify_region(event.x, event.y)
+        row_id = self.book_table.identify_row(event.y)
+        if region == "cell" and row_id:
+            self._edit_book()
 
     def _edit_book(self) -> None:
         book = self._selected_book()
