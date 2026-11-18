@@ -364,6 +364,83 @@ class BookForm(tk.Toplevel):
             return
         self.destroy()
 
+class ConfirmDeleteDialog(tk.Toplevel):
+    def __init__(self, parent: tk.Misc) -> None:
+        super().__init__(parent)
+        self.confirmed = False
+
+        self.title("Confirm delete")
+        self.configure(bg=COLOR_BG)
+        self.resizable(False, False)
+        self.transient(parent)
+        self.grab_set()
+
+        header = tk.Frame(self, bg=COLOR_PRIMARY, height=48)
+        header.pack(fill="x")
+        header.pack_propagate(False)
+        tk.Label(
+            header,
+            text="Confirm delete",
+            bg=COLOR_PRIMARY,
+            fg="white",
+            font=("Segoe UI", 12, "bold"),
+        ).pack(side="left", padx=20)
+
+        body = tk.Frame(self, bg=COLOR_BG, padx=20, pady=18)
+        body.pack(fill="both", expand=True)
+
+        tk.Label(
+            body,
+            text="Delete this book? This cannot be undone.",
+            bg=COLOR_BG,
+            fg=COLOR_TEXT,
+            font=("Segoe UI", 11),
+            anchor="w",
+        ).pack(side="top", fill="x")
+
+        buttons = tk.Frame(body, bg=COLOR_BG)
+        buttons.pack(side="bottom", fill="x")
+
+        RoundedButton(
+            buttons,
+            text="Cancel",
+            command=self._cancel,
+            variant="secondary",
+            padx=24,
+            pady=8,
+        ).pack(side="right")
+
+        RoundedButton(
+            buttons,
+            text="Delete",
+            command=self._confirm,
+            variant="danger",
+            padx=24,
+            pady=8,
+        ).pack(side="right", padx=(0, 10))
+
+        self.protocol("WM_DELETE_WINDOW", self._cancel)
+        self.bind("<Escape>", lambda _event: self._cancel())
+        self.bind("<Return>", lambda _event: self._confirm())
+
+        self.update_idletasks()
+        width = max(450, self.winfo_reqwidth())
+        height = max(225, self.winfo_reqheight())
+        parent_x = parent.winfo_rootx()
+        parent_y = parent.winfo_rooty()
+        parent_w = parent.winfo_width()
+        parent_h = parent.winfo_height()
+        x = parent_x + (parent_w - width) // 2
+        y = parent_y + (parent_h - height) // 2
+        self.geometry(f"{width}x{height}+{x}+{y}")
+
+    def _confirm(self) -> None:
+        self.confirmed = True
+        self.destroy()
+
+    def _cancel(self) -> None:
+        self.confirmed = False
+        self.destroy()
 
 class LibraryApplication(tk.Tk):
     SEARCH_PLACEHOLDER = "title, author, ISBN or category"
@@ -641,11 +718,9 @@ class LibraryApplication(tk.Tk):
         book = self._selected_book()
         if not book:
             return
-        if not messagebox.askyesno(
-            "Delete book",
-            f'Delete "{book.title}"?',
-            parent=self,
-        ):
+        dialog = ConfirmDeleteDialog(self)
+        self.wait_window(dialog)
+        if not dialog.confirmed:
             return
         if self.repository.delete_book(book.id):
             self._load_books(self._get_search_query())
